@@ -2,16 +2,18 @@
 
 namespace App\Http\Livewire\Admin;
 
-use App\Models\Product;
-use Livewire\Component;
 use App\Models\Category;
-use Illuminate\Support\Str;
+use Livewire\Component;
 use Livewire\WithFileUploads;
+use Illuminate\Support\Str;
+use App\Models\Product;
 use Illuminate\Support\Carbon;
 
 class AdminEditProductComponent extends Component
 {
+
     use WithFileUploads;
+
     public $product_id;
     public $name;
     public $slug;
@@ -38,49 +40,35 @@ class AdminEditProductComponent extends Component
         $this->regular_price = $product->regular_price;
         $this->sale_price = $product->sale_price;
         $this->SKU = $product->SKU;
+        $this->stock_status = $product->stock_status;
         $this->featured = $product->featured;
         $this->quantity = $product->quantity;
         $this->image = $product->image;
         $this->category_id = $product->category_id;
     }
-
     public function generateSlug()
     {
         $this->slug = Str::slug($this->name);
     }
 
-    public function updated($fields)
-    {
-        $this->validateOnly($fields, [
-            'name' => 'required',
-            'slug' => 'required|unique:products',
-            'short_description' => 'required',
-            'description' => 'required',
-            'regular_price' => 'required|numeric',
-            'sale_price' => 'numeric',
-            'SKU' => 'required',
-            'stock_status' => 'required',
-            'quantity' => 'required|numeric',
-            'image' => 'required|mimes:jpeg,png',
-            'category_id' => 'required',
-        ]);
-    }
 
     public function updateProduct()
     {
         $this->validate([
             'name' => 'required',
-            'slug' => 'required|unique:products',
+            'slug' => 'required',
             'short_description' => 'required',
             'description' => 'required',
-            'regular_price' => 'required|numeric',
-            'sale_price' => 'numeric',
+            'regular_price' => 'required',
+            'sale_price' => 'required',
             'SKU' => 'required',
             'stock_status' => 'required',
-            'quantity' => 'required|numeric',
-            'image' => 'required|mimes:jpeg,png',
+            'featured' => 'required',
+            'quantity' => 'required',
+            'image' => 'required',
             'category_id' => 'required',
         ]);
+        // $product = '';
 
         $product = Product::find($this->product_id);
         $product->name = $this->name;
@@ -94,20 +82,20 @@ class AdminEditProductComponent extends Component
         $product->featured = $this->featured;
         $product->quantity = $this->quantity;
         if ($this->newimage) {
-            unlink('assets/imgs/products/' . $product->image);
-            // unlink('assets/imgs/shop/'.$product->image);
+            unlink('assets/imgs/shop/' . $product->image);
             $imageName = Carbon::now()->timestamp . '.' . $this->newimage->extension();
-            $this->newimage->storeAs('products', $imageName);
-            // $this->newimage->storeAs('shop',$imageName);
-            $product->image =  $imageName;
+            $image = $this->newimage->storeAs('', $imageName);
+            $product->image = $image;
         }
+
         $product->category_id = $this->category_id;
         $product->save();
-        session()->flash('message', 'Product has been updated suceessefully!');
+
+        $product->category_id = $this->category_id;
+        $product->save();
+
+        session()->flash('message', 'Product Update Successfull');
     }
-
-
-
     public function render()
     {
         $categories = Category::orderBy('name', 'ASC')->get();
