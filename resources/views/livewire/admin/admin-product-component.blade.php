@@ -12,7 +12,7 @@
             <div class="container">
                 <div class="breadcrumb">
                     <a href="/" rel="nofollow">Home</a>
-                    <span></span> All Categories                
+                    <span></span> All Product                
                 </div>
             </div>
         </div>
@@ -27,7 +27,7 @@
                                     Add New Categories                
                                     </div>
                                     <div class="col-md-6">
-                                        <a href="{{ route('admin.category.add') }}" class="btn btn-success float-end">Add New Categories</a>
+                                        <a href="" class="btn btn-success float-end">Add New Product</a>
                                     </div>
                                 </div> 
                             </div>
@@ -39,29 +39,37 @@
                                     <thead>
                                         <tr>
                                             <th>#</th>
+                                            <th>Image</th>
                                             <th>Name</th>
-                                            <th>Slug</th>
+                                            <th>Stock</th>
+                                            <th>Price</th>
+                                            <th>Category</th>
+                                            <th>Date</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @php
-                                            $i = ($categories->currentPage()-1)*$categories->perPage();
+                                            $i = ($products->currentPage()-1)*$products->perPage();
                                         @endphp
-                                        @foreach ($categories as $category )
+                                        @foreach ($products as $product )
                                             <tr>
                                                 <td>{{ ++$i }}</td>
-                                                <td>{{ $category->name }}</td>
-                                                <td>{{ $category->slug }}</td>
+                                                <td><img src="{{ asset('assets/imgs/shop/product-') }}{{ $product->id }}-1.jpg" width="60" alt="{{ $product->name }}"></td>
+                                                <td>{{ $product->name }}</td>
+                                                <td>{{ $product->stock_status }}</td>
+                                                <td>{{ $product->regular_price }}</td>
+                                                <td>{{ $product->category->name }}</td>
+                                                <td>{{ $product->created_at }}</td>                                               
                                                 <td>
-                                                    <a href="{{ route('admin.category.edit',['category_id'=>$category->id]) }}" class="text-info">Edit</a>
-                                                    <a href="#" class="text-danger" onclick="deleteConfirmation({{ $category_id }})" style="margin-left: 20px;">Delete</a>
+                                                    {{-- <a href="{{ route('admin.home.slider.edit',['product_id'=>$product->id]) }}" class="text-info">Edit</a>
+                                                    <a href="#" class="text-danger" onclick="deleteConfirmation({{ $product_id }})" style="margin-left: 20px;">Delete</a> --}}
                                                 </td>
                                             </tr> 
                                         @endforeach
                                     </tbody>
                                 </table>
-                                {{ $categories->links() }}
+                                {{ $products->links() }}
                             </div>
                         </div>
                     </div>
@@ -79,7 +87,7 @@
                     <div class="col-md-12 text-center">
                         <h4 class="pb-30">Do you want to delete this record!</h4>
                         <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#deleteConfirmation">Cancel</button>
-                        <button type="button" class="btn btn-danger" onclick="deleteCategory()">Delete</button>
+                        <button type="button" class="btn btn-danger" onclick="deleteProduct()">Delete</button>
                     </div>
                 </div>
             </div>
@@ -91,12 +99,12 @@
     <script>
         function deleteConfirmation(id)
         {
-            @this.set('category_id',id);
+            @this.set('product_id',id);
             $('#deleteConfirmation').modal('show');
         } 
-        function deleteCategory()
+        function deleteProduct()
         {
-            @this.call('deleteCategory');
+            @this.call('deleteProduct');
             $('#deleteConfirmation').modal('hide');
         }
     </script>
