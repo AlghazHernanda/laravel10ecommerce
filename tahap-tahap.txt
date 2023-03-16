@@ -1,5 +1,6 @@
 -composer require livewire/livewire
 -php artisan make:livewire HomeComponent
+php artisan make:livewire admin/AdminAddProductComponent
 
 //buat auto login
 -composer require laravel/breeze --dev
@@ -7,3 +8,9 @@
 -npm install && npm run build
 
 composer require hardevine/shoppingcart
+
+
+untuk mengganti default penyimpanan gambar
+-masuk ke filesystem.php
+lalu masukan code ini 
+ 'root' => public_path('assets/imgs'),
