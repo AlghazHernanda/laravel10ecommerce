@@ -49,6 +49,7 @@ class AdminAddProductComponent extends Component
 
     public function addProduct()
     {
+        // validasi secara realtime sebelum user mencet submit
         $this->validate([
             'name' => 'required',
             'slug' => 'required|unique:products',

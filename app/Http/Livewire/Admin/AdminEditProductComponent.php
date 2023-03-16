@@ -54,6 +54,7 @@ class AdminEditProductComponent extends Component
 
     public function updateProduct()
     {
+        // validasi secara realtime sebelum user mencet submit
         $this->validate([
             'name' => 'required',
             'slug' => 'required',
@@ -83,6 +84,7 @@ class AdminEditProductComponent extends Component
         $product->quantity = $this->quantity;
         if ($this->newimage) {
             unlink('assets/imgs/shop/' . $product->image);
+            unlink('assets/imgs/shop/livewire-tmp/*');
             $imageName = Carbon::now()->timestamp . '.' . $this->newimage->extension();
             $image = $this->newimage->storeAs('', $imageName);
             $product->image = $image;
