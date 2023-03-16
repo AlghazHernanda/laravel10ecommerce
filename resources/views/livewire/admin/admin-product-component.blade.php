@@ -27,7 +27,7 @@
                                     Add New Categories                
                                     </div>
                                     <div class="col-md-6">
-                                        <a href="" class="btn btn-success float-end">Add New Product</a>
+                                        <a href="{{ route('admin.product.add') }}" class="btn btn-success float-end">Add New Product</a>
                                     </div>
                                 </div> 
                             </div>
